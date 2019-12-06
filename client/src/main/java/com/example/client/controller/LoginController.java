@@ -53,25 +53,7 @@ public class LoginController {
 
     }
 
-    @RequestMapping(value = "logout", method = RequestMethod.POST)
-    @ResponseBody
-    @HystrixCommand(fallbackMethod = "loginError")
-    public JSONObject logout(@RequestBody  String user, HttpServletRequest request) {
-        User newUser = JSONObject.parseObject(user, User.class);
-        if(!redisUtil.hasKey(newUser.getUserName())){
-            return ServerResponse.nologin();
-        }
-        User redisUser= JSONObject.parseObject(redisUtil.get(newUser.getUserName()).toString(), User.class);
-        String rToken=request.getHeader("token");
-        String token=redisUser.getUserName()+ "_"+ DigestUtils.md5DigestAsHex((redisUser.getUserName() +redisUser.getPassword()).getBytes());
-        if(!rToken.equalsIgnoreCase(token)){
-                return ServerResponse.responseResultCusError("你不是该用户");
-        }
-        redisUtil.del(newUser.getUserName());
 
-        return ServerResponse.responseResultSuccess("退出登录成功");
-
-    }
 
 //    熔断,服务端挂掉调用这个方法
     public JSONObject loginError(String user, HttpServletRequest request) {

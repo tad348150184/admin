@@ -11,11 +11,23 @@ public class User implements Serializable {
     private Long id;
     private String userName;
     private String password;
+    @Column(insertable=false,updatable=false)
     private Long roleId;
     @Transient
     private String roleName;
     @Transient
     private String token;
+    @OneToOne
+    @JoinColumn(name = "roleId")
+    private Role role;
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
 
     public String getRoleName() {
         return roleName;

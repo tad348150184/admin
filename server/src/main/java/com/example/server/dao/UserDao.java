@@ -8,7 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface  UserDao extends JpaRepository<User, Long> {
-    @Query(value = "select * from user",nativeQuery = true)
+    //jpa api复杂，无法用map接收，因而业务上更多选用mybatis
+    @Query(value = "select * from user inner join role on user.role_id=role.id",nativeQuery = true)
     List<User> findAll();
 
     User findByUserNameAndPassword(String userName, String passWord);

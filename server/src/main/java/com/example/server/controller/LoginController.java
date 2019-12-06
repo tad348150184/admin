@@ -39,7 +39,7 @@ public class LoginController {
         User newUser = JSONObject.parseObject(user, User.class);
         newUser = userDao.findByUserNameAndPassword(newUser.getUserName(), newUser.getPassword());
         if (newUser != null) {
-            redisUtil.set(newUser.getUserName(), newUser);
+            redisUtil.set(newUser.getUserName(), newUser,43200);
             //给前端作为请求头返回后端方便验证
             String token=newUser.getUserName()+ "_"+DigestUtils.md5DigestAsHex((newUser.getUserName() +newUser.getPassword()).getBytes());
             return ServerResponse.responseResultSuccess(token);
