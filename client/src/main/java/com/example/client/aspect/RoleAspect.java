@@ -58,11 +58,13 @@ public class RoleAspect {
         stopWatch.start("RoleAspect");
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
                 .getRequest();
-        if(200 != CommonStatic.IfLogin(request).getIntValue("code")){
-            return CommonStatic.IfLogin(request);
+        JSONObject ifLogin=CommonStatic.IfLogin(request);
+        if(200 != ifLogin.getIntValue("code")){
+            return ifLogin;
         }
-        if(200 != CommonStatic.IfRole(request).getIntValue("code")){
-            return CommonStatic.IfRole(request);
+        JSONObject IfRole=CommonStatic.IfRole(request);
+        if(200 != IfRole.getIntValue("code")){
+            return IfRole;
         }
         Object result= point.proceed();
         stopWatch.stop();

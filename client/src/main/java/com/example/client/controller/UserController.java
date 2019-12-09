@@ -46,19 +46,10 @@ public class UserController {
     }
     @RequestMapping(value = "logout", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject logout(@RequestBody  String user, HttpServletRequest request) {
-        User newUser = JSONObject.parseObject(user, User.class);
-        if(!redisUtil.hasKey(newUser.getUserName())){
-            return ServerResponse.nologin();
-        }
-        User redisUser= JSONObject.parseObject(redisUtil.get(newUser.getUserName()).toString(), User.class);
-        String rToken=request.getHeader("token");
-        String token=redisUser.getUserName()+ "_"+ DigestUtils.md5DigestAsHex((redisUser.getUserName() +redisUser.getPassword()).getBytes());
-        if(!rToken.equalsIgnoreCase(token)){
-            return ServerResponse.responseResultCusError("你不是该用户");
-        }
-        redisUtil.del(newUser.getUserName());
-
+    public JSONObject logout(HttpServletRequest request) {
+        String token=request.getHeader("token");
+        String userName=token.split("_")[0];
+        redisUtil.del(userName);
         return ServerResponse.responseResultSuccess("退出登录成功");
 
     }

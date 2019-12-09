@@ -52,9 +52,9 @@ public class LoginAspect {
         stopWatch.start("LoginAspect");
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
                 .getRequest();
-        String[] token=request.getHeader("token").split("_");
-        if(200 != CommonStatic.IfLogin(request).getIntValue("code")){
-            return CommonStatic.IfLogin(request);
+        JSONObject ifLogin=CommonStatic.IfLogin(request);
+        if(200 != ifLogin.getIntValue("code")){
+            return ifLogin;
         }
         Object result= point.proceed();
         saveLog(request);

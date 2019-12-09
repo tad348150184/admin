@@ -39,7 +39,7 @@ public class LoginController {
 
     @RequestMapping(value = "login", method = RequestMethod.POST)
     @ResponseBody
-    @HystrixCommand(fallbackMethod = "loginError")
+//    @HystrixCommand(fallbackMethod = "loginError")
     public JSONObject home(@RequestBody  String user, HttpServletRequest request) {
         User newUser = JSONObject.parseObject(user, User.class);
         String token=newUser.getUserName()+ "_"+ DigestUtils.md5DigestAsHex((newUser.getUserName() +newUser.getPassword()).getBytes());
@@ -56,9 +56,9 @@ public class LoginController {
 
 
 //    熔断,服务端挂掉调用这个方法
-    public JSONObject loginError(String user, HttpServletRequest request) {
-        return ServerResponse.responseResultCusError("服务器挂啦");
-    }
+//    public JSONObject loginError(String user, HttpServletRequest request) {
+//        return ServerResponse.responseResultCusError("服务器挂啦");
+//    }
 
 
 }
